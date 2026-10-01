@@ -50,7 +50,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -88,6 +90,7 @@ fun BroadcastControlScreen(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraManager = remember { CameraCaptureManager(context) }
+    var previewViewRef by remember { androidx.compose.runtime.mutableStateOf<PreviewView?>(null) }
 
     DisposableEffect(lifecycleOwner) {
         onDispose {
@@ -108,6 +111,7 @@ fun BroadcastControlScreen(
                 PreviewView(ctx).apply {
                     implementationMode = PreviewView.ImplementationMode.COMPATIBLE
                     cameraManager.bindCamera(lifecycleOwner, this)
+                    previewViewRef = this
                 }
             },
             modifier = Modifier
@@ -410,8 +414,9 @@ fun BroadcastControlScreen(
                     isActive = uiState.telemetry.isFrontCamera,
                     onClick = {
                         val isFront = viewModel.toggleCamera()
-                        // switch in CameraManager
-                        // cameraManager.switchCamera(...)
+                        previewViewRef?.let {
+                            cameraManager.switchCamera(lifecycleOwner, it)
+                        }
                     },
                     contentDescription = "Switch Camera"
                 )

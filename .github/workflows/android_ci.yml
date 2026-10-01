@@ -35,6 +35,18 @@ jobs:
             cp .env.example .env
           fi
 
+      - name: Prefetch Robolectric Android-All JAR
+        run: |
+          ROBO_DIR="$HOME/.m2/repository/org/robolectric/android-all/14-robolectric-10818077"
+          mkdir -p "$ROBO_DIR"
+          if [ ! -f "$ROBO_DIR/android-all-14-robolectric-10818077.jar" ]; then
+            echo "Downloading Robolectric jar to local maven repository..."
+            curl -fSL -o "$ROBO_DIR/android-all-14-robolectric-10818077.jar" \
+              https://repo1.maven.org/maven2/org/robolectric/android-all/14-robolectric-10818077/android-all-14-robolectric-10818077.jar || true
+            curl -fSL -o "$ROBO_DIR/android-all-14-robolectric-10818077.pom" \
+              https://repo1.maven.org/maven2/org/robolectric/android-all/14-robolectric-10818077/android-all-14-robolectric-10818077.pom || true
+          fi
+
       - name: Grant Execute Permission to gradlew
         run: chmod +x gradlew
 

@@ -64,6 +64,8 @@ android {
           events("passed", "skipped", "failed", "standardOut", "standardError")
           showStandardStreams = true
         }
+        it.systemProperty("robolectric.dependency.repo.url", "https://repo1.maven.org/maven2")
+        it.systemProperty("robolectric.dependency.repo.id", "central")
       }
     }
   }

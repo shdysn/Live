@@ -1,6 +1,7 @@
 package com.example
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import pk.livecaster.app.core.common.Resource
@@ -45,6 +46,6 @@ class ExampleUnitTest {
 
     val errorRes = Resource.Error("Connection timed out")
     assertTrue(errorRes.isError)
-    assertEquals(null, errorRes.getOrNull())
+    assertNull(errorRes.getOrNull())
   }
 }
